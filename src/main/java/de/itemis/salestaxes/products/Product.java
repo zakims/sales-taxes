@@ -1,8 +1,8 @@
-package main.java.products;
+package de.itemis.salestaxes.products;
 
 import java.math.BigDecimal;
 
-import main.java.purchasing.Taxing;
+import de.itemis.salestaxes.purchasing.Taxing;
 
 /**
  * An abstract product class which contains all basic fields and methods of a

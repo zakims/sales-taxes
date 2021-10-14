@@ -1,21 +1,22 @@
-package main.java;
+package de.itemis.salestaxes;
+
 
 import java.math.BigDecimal;
 
-import main.java.products.Food;
-import main.java.products.Medicine;
-import main.java.products.Product;
-import main.java.products.TaxedProduct;
-import main.java.purchasing.ShoppingCart;
-import main.java.purchasing.ShoppingItem;
+import de.itemis.salestaxes.products.Food;
+import de.itemis.salestaxes.products.Medicine;
+import de.itemis.salestaxes.products.Product;
+import de.itemis.salestaxes.products.TaxedProduct;
+import de.itemis.salestaxes.purchasing.ShoppingCart;
+import de.itemis.salestaxes.purchasing.ShoppingItem;
 
 public class Main {
 
 	public static String INPUT_FILE_PATH = "input1.txt";
 
-	public static String MEDICAL_PRODUCT_FILE_PATH = "medical-products.txt";
+	public static String MEDICAL_PRODUCT_FILE_PATH = "src/main/resources/medical-products.txt";
 
-	public static String FOOD_PRODUCT_FILE_PATH = "food-products.txt";
+	public static String FOOD_PRODUCT_FILE_PATH = "src/main/resources/food-products.txt";
 
 	public static void main(String[] args) {
 

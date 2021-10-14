@@ -1,4 +1,4 @@
-package main.java.purchasing;
+package de.itemis.salestaxes.purchasing;
 
 import java.math.BigDecimal;
 

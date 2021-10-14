@@ -1,4 +1,5 @@
-package main.java;
+package de.itemis.salestaxes;
+
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -11,10 +12,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import main.java.products.Product;
-import main.java.products.ProductFactory;
-import main.java.purchasing.ShoppingCart;
-import main.java.purchasing.ShoppingItem;
+import de.itemis.salestaxes.products.Product;
+import de.itemis.salestaxes.products.ProductFactory;
+import de.itemis.salestaxes.purchasing.ShoppingCart;
+import de.itemis.salestaxes.purchasing.ShoppingItem;
 
 public class Parser {
 
