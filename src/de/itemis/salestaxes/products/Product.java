@@ -105,9 +105,13 @@ public abstract class Product {
 
 	@Override
 	public String toString() {
-		// "<unit> of " or empty string if no unit
-		String unitOf = unit + (unit.equals("") || unit.equals(null) ? "" : " of ");
-		return (isImported ? "imported " : "") + unitOf + name;
+
+		String unitOfLiteral = unit.isBlank() ? "" : (unit + " of ");
+		
+		String importedLiteral = isImported ? "imported " : "";
+
+		return importedLiteral + unitOfLiteral + name;
+
 	}
 
 }
