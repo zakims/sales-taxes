@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -59,9 +59,9 @@ public class Parser {
 			lines.map(Parser::parseShoppingItem).forEach(item -> cart.addItem(item));
 
 		} catch (IOException e) {
-
-			e.printStackTrace();
-
+			System.err.println("Input file cannot be found at: " + inputFilePath);
+			System.err.println("Please provide the correct file path and retry!");
+			System.exit(-1);
 		}
 
 		return cart;
@@ -102,7 +102,7 @@ public class Parser {
 	 */
 	private static ShoppingItem parseShoppingItem(String line) {
 
-		List<String> words = new ArrayList<>(Arrays.asList(line.split(" ")));
+		List<String> words = Arrays.asList(line.split(" "));
 
 		int quantity = Integer.parseInt(words.get(0));
 
@@ -202,13 +202,14 @@ public class Parser {
 
 		try (Stream<String> lines = Files.lines(path)) {
 
-			return lines.toList();
+			return lines.collect(Collectors.toList());
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println("Food products file cannot be found at: " + filePath);
+			System.err.println("Food products will not be correctly identified");
 		}
 
-		return new ArrayList<String>();
+		return Collections.emptyList();
 	}
 
 	/**
@@ -224,15 +225,14 @@ public class Parser {
 
 		try (Stream<String> lines = Files.lines(path)) {
 
-			return lines.toList();
+			return lines.collect(Collectors.toList());
 
 		} catch (IOException e) {
-
-			e.printStackTrace();
-
+			System.err.println("Medical products file cannot be found at: " + filePath);
+			System.err.println("Medical products will not be correctly identified");
 		}
 
-		return new ArrayList<String>();
+		return Collections.emptyList();
 	}
 
 }
