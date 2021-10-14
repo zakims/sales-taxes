@@ -13,9 +13,9 @@ public class Main {
 
 	public static String INPUT_FILE_PATH = "input1.txt";
 
-	public static String MEDICAL_PRODUCT_FILE_PATH = "food-products.txt";
+	public static String MEDICAL_PRODUCT_FILE_PATH = "medical-products.txt";
 
-	public static String FOOD_PRODUCT_FILE_PATH = "medical-products.txt";
+	public static String FOOD_PRODUCT_FILE_PATH = "food-products.txt";
 
 	public static void main(String[] args) {
 
