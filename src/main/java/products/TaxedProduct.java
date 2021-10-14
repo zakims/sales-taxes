@@ -1,8 +1,8 @@
-package de.itemis.salestaxes.products;
+package main.java.products;
 
 import java.math.BigDecimal;
 
-import de.itemis.salestaxes.purchasing.Taxing;
+import main.java.purchasing.Taxing;
 
 public class TaxedProduct extends Product {
 

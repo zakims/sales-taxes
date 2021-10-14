@@ -1,9 +1,9 @@
-package de.itemis.salestaxes.purchasing;
+package main.java.purchasing;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import de.itemis.salestaxes.products.Product;
+import main.java.products.Product;
 
 /**
  * A wrapper class for {@link Product}. A product is wrapped inside this class

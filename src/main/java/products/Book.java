@@ -1,10 +1,10 @@
-package de.itemis.salestaxes.products;
+package main.java.products;
 
 import java.math.BigDecimal;
 
-public class Food extends Product {
+public class Book extends Product {
 
-	public Food(String name, BigDecimal netPrice, String unit, boolean isImported) {
+	public Book(String name, BigDecimal netPrice, String unit, boolean isImported) {
 		super(name, netPrice, unit, isImported);
 	}
 

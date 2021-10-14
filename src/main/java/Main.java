@@ -1,13 +1,13 @@
-package de.itemis.salestaxes.main;
+package main.java;
 
 import java.math.BigDecimal;
 
-import de.itemis.salestaxes.products.Food;
-import de.itemis.salestaxes.products.Medicine;
-import de.itemis.salestaxes.products.Product;
-import de.itemis.salestaxes.products.TaxedProduct;
-import de.itemis.salestaxes.purchasing.ShoppingCart;
-import de.itemis.salestaxes.purchasing.ShoppingItem;
+import main.java.products.Food;
+import main.java.products.Medicine;
+import main.java.products.Product;
+import main.java.products.TaxedProduct;
+import main.java.purchasing.ShoppingCart;
+import main.java.purchasing.ShoppingItem;
 
 public class Main {
 
