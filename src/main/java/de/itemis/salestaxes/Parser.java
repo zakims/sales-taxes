@@ -1,10 +1,12 @@
 package de.itemis.salestaxes;
 
-
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,16 +21,101 @@ import de.itemis.salestaxes.purchasing.ShoppingItem;
 
 public class Parser {
 
-	/**
-	 * Relative path to the file containing names of all medical products.
-	 */
-	private static List<String> medicalProducts;
+	private static Parser INSTANCE;
 
 	/**
-	 * Relative path to the file containing names of all food products.
+	 * The name of the file listing the names of all medical products
 	 */
-	private static List<String> foodProducts;
+	public static String MEDICAL_PRODUCTS_FILE_NAME = "medical-products.txt";
 
+	/**
+	 * The name of the file listing the names of all food products
+	 */
+	public static String FOOD_PRODUCT_FILE_NAME = "food-products.txt";
+
+	/**
+	 * List of medical product names used to identify food products in the shopping
+	 * cart
+	 */
+	private List<String> medicalProducts;
+
+	/**
+	 * List of food product names used to identify food products in the shopping
+	 * cart
+	 */
+	private List<String> foodProducts;
+
+	
+	private Parser() {
+
+		medicalProducts = loadMedicalProducts();
+
+		foodProducts = loadFoodProducts();
+	}
+
+	public static Parser getInstance() {
+
+		if (INSTANCE == null)
+			INSTANCE = new Parser();
+
+		return INSTANCE;
+	}
+
+	/**
+	 * Parses the names of the food products from the food products file
+	 * 
+	 * @return A list of the names of the food products as parsed from the food
+	 *         products file
+	 */
+	private static List<String> loadFoodProducts() {
+
+		InputStream inputStream = Parser.class.getClassLoader().getResourceAsStream(FOOD_PRODUCT_FILE_NAME);
+
+		if (inputStream == null) {
+
+			System.err.println("Food products file cannot be found.");
+			System.err.println("Food products will not be correctly identified.");
+
+			return Collections.emptyList();
+		}
+
+		InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+
+		BufferedReader bufferedReader = new BufferedReader(streamReader);
+
+		Stream<String> lines = bufferedReader.lines();
+
+		return lines.collect(Collectors.toList());
+
+	}
+
+	/**
+	 * Parses the names of the medical products from the medical products file
+	 * 
+	 * @return A list of the names of the medical products as parsed from the
+	 *         medical products file
+	 */
+	private static List<String> loadMedicalProducts() {
+
+		InputStream inputStream = Parser.class.getClassLoader().getResourceAsStream(MEDICAL_PRODUCTS_FILE_NAME);
+
+		if (inputStream == null) {
+
+			System.err.println("Medical products file cannot be found.");
+			System.err.println("Medical products will not be correctly identified.");
+
+			return Collections.emptyList();
+		}
+
+		InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+
+		BufferedReader bufferedReader = new BufferedReader(streamReader);
+
+		Stream<String> lines = bufferedReader.lines();
+
+		return lines.collect(Collectors.toList());
+	}
+	
 	/**
 	 * Parses the contents of the input file and creates a shopping cart containing
 	 * all the items
@@ -36,28 +123,16 @@ public class Parser {
 	 * @param inputFilePath   Relative path to the file containing the contents of
 	 *                        the shopping cart to be parsed
 	 * 
-	 * @param medicalFilePath Relative path to the file containing names of all
-	 *                        medical products, used to identify food products in
-	 *                        the shopping cart
-	 * 
-	 * @param foodFilePath    Relative path to the file containing names of all food
-	 *                        products, used to identify food products in the
-	 *                        shopping cart
-	 * 
 	 * @return A shopping cart containing all the items as parsed from the specified
 	 *         file
 	 */
-	public static ShoppingCart parseShoppingCart(String inputFilePath, String medicalFilePath, String foodFilePath) {
+	public ShoppingCart parseShoppingCart(String inputFilePath) {
 
 		ShoppingCart cart = new ShoppingCart();
 
-		// This method has to be called before parsing any shopping item from the file
-		// because it is needed to identify the product type while parsing
-		loadFoodAndMedicine(medicalFilePath, foodFilePath);
-
 		try (Stream<String> lines = Files.lines(Paths.get(inputFilePath))) {
 
-			lines.map(Parser::parseShoppingItem).forEach(item -> cart.addItem(item));
+			lines.map(this::parseShoppingItem).forEach(item -> cart.addItem(item));
 
 		} catch (IOException e) {
 			System.err.println("Input file cannot be found at: " + inputFilePath);
@@ -66,28 +141,6 @@ public class Parser {
 		}
 
 		return cart;
-	}
-
-	/**
-	 * Parses the contents of the medical and food product names from their
-	 * respective files and stores them in {@link #medicalProducts} and
-	 * {@link #foodProducts} respectively
-	 * 
-	 * @param medicalFilePath Relative path to the file containing names of all
-	 *                        medical products, used to identify food products in
-	 *                        the shopping cart
-	 * 
-	 * @param foodFilePath    Relative path to the file containing names of all food
-	 *                        products, used to identify food products in the
-	 *                        shopping cart
-	 * 
-	 */
-	private static void loadFoodAndMedicine(String medicalFilePath, String foodFilePath) {
-
-		medicalProducts = getMedicalProducts(medicalFilePath);
-
-		foodProducts = getFoodProducts(foodFilePath);
-
 	}
 
 	/**
@@ -101,7 +154,7 @@ public class Parser {
 	 * 
 	 * @return a shopping item as parse from the specified line
 	 */
-	private static ShoppingItem parseShoppingItem(String line) {
+	public ShoppingItem parseShoppingItem(String line) {
 
 		List<String> words = Arrays.asList(line.split(" "));
 
@@ -170,7 +223,7 @@ public class Parser {
 	 * @param name The product name as parsed from the input file
 	 * @return The inferred product type
 	 */
-	private static String getProductType(String name) {
+	private String getProductType(String name) {
 
 		// If the product name contains “book”: it is assumed to be of type Book.
 		if (name.contains("book"))
@@ -188,52 +241,6 @@ public class Parser {
 		// If the product is not book, food, or medical product, it is assumed to be
 		// another type which is taxed
 		return "taxed";
-	}
-
-	/**
-	 * Parses the names of the food products from the specified file
-	 * 
-	 * @param filePath Relative path to the file containing the names of all food
-	 *                 products
-	 * @return A list of the names of the food products as parsed from the file
-	 */
-	private static List<String> getFoodProducts(String filePath) {
-
-		Path path = Paths.get(filePath);
-
-		try (Stream<String> lines = Files.lines(path)) {
-
-			return lines.collect(Collectors.toList());
-
-		} catch (IOException e) {
-			System.err.println("Food products file cannot be found at: " + filePath);
-			System.err.println("Food products will not be correctly identified");
-		}
-
-		return Collections.emptyList();
-	}
-
-	/**
-	 * Parses the names of the medical products from the specified file
-	 * 
-	 * @param filePath Relative path to the file containing the names of all medical
-	 *                 products
-	 * @return A list of the names of the medical products as parsed from the file
-	 */
-	private static List<String> getMedicalProducts(String filePath) {
-
-		Path path = Paths.get(filePath);
-
-		try (Stream<String> lines = Files.lines(path)) {
-
-			return lines.collect(Collectors.toList());
-
-		} catch (IOException e) {
-			System.err.println("Medical products file cannot be found at: " + filePath);
-			System.err.println("Medical products will not be correctly identified");
-		}
-
-		return Collections.emptyList();
 	}
 
 }

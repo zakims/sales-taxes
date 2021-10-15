@@ -1,6 +1,5 @@
 package de.itemis.salestaxes;
 
-
 import java.math.BigDecimal;
 
 import de.itemis.salestaxes.products.Food;
@@ -12,20 +11,9 @@ import de.itemis.salestaxes.purchasing.ShoppingItem;
 
 public class Main {
 
-	public static String INPUT_FILE_PATH = "input1.txt";
-
-	public static String MEDICAL_PRODUCT_FILE_PATH = "src/main/resources/medical-products.txt";
-
-	public static String FOOD_PRODUCT_FILE_PATH = "src/main/resources/food-products.txt";
-
 	public static void main(String[] args) {
 
-//		ShoppingCart mockCart = createMockShoppingCart();
-//		
-//		mockCart.printReceipt();
-
-		ShoppingCart cart = Parser.parseShoppingCart(INPUT_FILE_PATH, MEDICAL_PRODUCT_FILE_PATH,
-				FOOD_PRODUCT_FILE_PATH);
+		ShoppingCart cart = Parser.getInstance().parseShoppingCart(args[0]);
 
 		cart.printReceipt();
 
