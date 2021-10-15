@@ -82,4 +82,14 @@ public class ShoppingCart {
 		System.out.format("Total: %.2f%n", orderTotal);
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+
+		if (!(obj instanceof ShoppingCart))
+			return false;
+
+		ShoppingCart cart = (ShoppingCart) obj;
+
+		return (cart.orderTotal.equals(orderTotal)) && (cart.items.equals(items));
+	}
 }

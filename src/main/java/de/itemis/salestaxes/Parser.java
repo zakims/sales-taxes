@@ -45,7 +45,6 @@ public class Parser {
 	 */
 	private List<String> foodProducts;
 
-	
 	private Parser() {
 
 		medicalProducts = loadMedicalProducts();
@@ -115,18 +114,18 @@ public class Parser {
 
 		return lines.collect(Collectors.toList());
 	}
-	
+
 	/**
 	 * Parses the contents of the input file and creates a shopping cart containing
 	 * all the items
 	 * 
-	 * @param inputFilePath   Relative path to the file containing the contents of
-	 *                        the shopping cart to be parsed
+	 * @param inputFilePath Relative path to the file containing the contents of the
+	 *                      shopping cart to be parsed
 	 * 
 	 * @return A shopping cart containing all the items as parsed from the specified
 	 *         file
 	 */
-	public ShoppingCart parseShoppingCart(String inputFilePath) {
+	public ShoppingCart parseShoppingCartFromFile(String inputFilePath) {
 
 		ShoppingCart cart = new ShoppingCart();
 
@@ -139,6 +138,24 @@ public class Parser {
 			System.err.println("Please provide the correct file path and retry!");
 			System.exit(-1);
 		}
+
+		return cart;
+	}
+
+	/**
+	 * Parses the contents of the input file and creates a shopping cart containing
+	 * all the items
+	 * 
+	 * @param inputFileContent A string stream of the input file to be parsed
+	 * 
+	 * @return A shopping cart containing all the items as parsed from the specified
+	 *         file
+	 */
+	public ShoppingCart parseShoppingCartFromStream(Stream<String> stream) {
+
+		ShoppingCart cart = new ShoppingCart();
+
+		stream.map(this::parseShoppingItem).forEach(item -> cart.addItem(item));
 
 		return cart;
 	}

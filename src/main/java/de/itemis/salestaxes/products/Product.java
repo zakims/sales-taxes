@@ -2,8 +2,6 @@ package de.itemis.salestaxes.products;
 
 import java.math.BigDecimal;
 
-import de.itemis.salestaxes.purchasing.Taxing;
-
 /**
  * An abstract product class which contains all basic fields and methods of a
  * product. Subclasses shall implement {@link #getBasicTaxRate()} to return any
@@ -13,6 +11,17 @@ import de.itemis.salestaxes.purchasing.Taxing;
  *
  */
 public abstract class Product {
+
+	/**
+	 * Basic sales tax rate applied to all products except food, book and medical
+	 * products
+	 */
+	public static BigDecimal DEFAULT_BASIC_TAX_RATE = new BigDecimal("0.10");
+
+	/**
+	 * Import duty tax rate applied to all imported products without exceptions
+	 */
+	public static BigDecimal DEFAULT_IMPORT_TAX_RATE = new BigDecimal("0.05");
 
 	/**
 	 * Shelf name of the product
@@ -87,7 +96,7 @@ public abstract class Product {
 	 * @return Import tax rate
 	 */
 	private BigDecimal getImportTaxRate() {
-		return isImported ? Taxing.DEFAULT_IMPORT_TAX_RATE : BigDecimal.ZERO;
+		return isImported ? Product.DEFAULT_IMPORT_TAX_RATE : BigDecimal.ZERO;
 	}
 
 	/**
@@ -107,11 +116,23 @@ public abstract class Product {
 	public String toString() {
 
 		String unitOfLiteral = unit.isBlank() ? "" : (unit + " of ");
-		
+
 		String importedLiteral = isImported ? "imported " : "";
 
 		return importedLiteral + unitOfLiteral + name;
 
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+
+		if (obj.getClass() != getClass())
+			return false;
+
+		Product p = (Product) obj;
+
+		return (p.name.equals(name) && p.netPrice.equals(netPrice) && p.unit.equals(unit)
+				&& p.isImported == isImported);
 	}
 
 }

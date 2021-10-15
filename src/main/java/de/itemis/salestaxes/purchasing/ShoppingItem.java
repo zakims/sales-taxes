@@ -9,11 +9,13 @@ import de.itemis.salestaxes.products.Product;
  * A wrapper class for {@link Product}. A product is wrapped inside this class
  * whenever it is added to the {@link ShoppingCart}. It tracks the quantity of
  * the product and it is responsible for calculating its sales taxes and gross
- * price
+ * price at creation time.
  * 
  * @author Mahmoud Ragab
  */
 public class ShoppingItem {
+
+	public static BigDecimal ROUNDING_INCREMENT = new BigDecimal("0.05");
 
 	private Product product;
 
@@ -54,11 +56,11 @@ public class ShoppingItem {
 		// Calculate sales taxes
 
 		BigDecimal salesTaxesPerUnit = product.getNetPrice().multiply(product.getTaxRate());
+		
+		salesTaxesPerUnit = roundUpToNearestRoundingIncrement(salesTaxesPerUnit, ROUNDING_INCREMENT);
 
 		salesTaxes = salesTaxesPerUnit.multiply(BigDecimal.valueOf(quantity));
-
-		salesTaxes = roundUpToNearestRoundingIncrement(salesTaxes, Taxing.ROUNDING_INCREMENT);
-
+		
 		// Calculate grossPrice
 
 		BigDecimal grossPricePerUnit = product.getNetPrice().add(salesTaxesPerUnit);
@@ -80,6 +82,16 @@ public class ShoppingItem {
 
 		return String.format(quantity + " " + product + ": %.2f", grossPrice);
 
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof ShoppingItem))
+			return false;
+
+		ShoppingItem item = (ShoppingItem) obj;
+
+		return (item.quantity == quantity && item.product.equals(product));
 	}
 
 	/**
