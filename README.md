@@ -45,21 +45,16 @@ Output 3:
 
 ## How to use:
 
-The repository is an Eclipse IDE Jave project (Java SE 16) so you need to have Eclipse IDE installed easily build and run the application. By default eclipse automatically builds the project, so you only need to **configure its inputs** and **run it**  
+The repository is an Eclipse Maven project. 
 
-#### How to configure the inputs
-There are three _files_ that are required for the application work successfully:
-* __Input__ e.g. [input1.txt](input1.txt), [input2.txt](input2.txt), [input3.txt](input3.txt): the main input which lists the contents of the shopping cart including quantities and prices
-* __Food products__ e.g. [food-products.txt](food-products.txt) : lists the names of all food products (one name per line) which is used to identify food products.
-* __Medical products__ e.g. [medical-products.txt](medical-products.txt): lists the names of all medical products (one name per line) which is used to identify medical products.
+1. Download Maven and JDK 16, unzip, setup JAVA_HOME and MAVEN_HOME environment variables and add them to your path (if needed checkout this [step-by-step guide](https://mkyong.com/maven/how-to-install-maven-in-windows/) from mkyong
+2. CLone the repo to your local PC
+3. Open CMD prompt or git bash inside your local repo and type:
+`mvn package`
+This will compile, test and package the application into target/salestaxes-0.0.1-SNAPSHOT.jar
+4. Run the application and pass the input file path as a command line argument
+`java -jar target/salestaxes-0.0.1-SNAPSHOT.jar input1.txt`
 
-The relative paths (with respect to root of the repo) to those three files are defined as static variables inside [Main.java](src/de/itemis/salestaxes/main/Main.java). Feel free to change them to your liking, but only after you place the respective files in the respective path defined in Main.java
-
-#### How to run:
-1. CLone the repo to you local PC
-2. Install Eclipse IDE (if not installed) and start it.
-3. Import project to eclipse: File > Import > General > Existing Projects into Workspace > Select root directory > Browse > Navigate to sales-taxes (e.g. local repo) > Select Folder > Finish
-4. Run the application: In project explorer in Eclipse IDE, right-click on the project root folder and select Run AS > Java Application
 
 ## Assumptions:
 
@@ -70,6 +65,8 @@ The relative paths (with respect to root of the repo) to those three files are d
     4.	Product **name** comes immediately before the **price**. It can be composed of several words, but cannot contain any of the keywords: *of*, *at*, *imported* 
     5.	Line ends with the net **price** of a single unit of the product preceded by **at** keyword
 
+* The application has two files packaged into the final jar. [food-products.txt](src/main/resources/food-products.txt) : lists the names of all food products (one name per line) which is used to identify food products.
+[medical-products.txt](src/main/resources/medical-products.txt): lists the names of all medical products (one name per line) which is used to identify medical products. Feel free to change the content of those two files and repeat the build as specified above.
 
 * Product type inference from product name: 
     1. If name contains “book” : it is of type **Book**
